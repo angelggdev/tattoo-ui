@@ -1,0 +1,43 @@
+.login {
+    &__container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: url('../../public/bg.jpg');
+    }
+
+    &__form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+        width: 300px;
+        background-color: #ffffff;
+        padding: 50px;
+        border-radius: 5px;
+
+        &__icon {
+            cursor: pointer;
+        }
+
+        &__password-button {
+            position: absolute !important;
+            
+        }
+
+        &__username {
+            width: 260px
+        }
+
+        img {
+            margin-bottom: 20px;
+        }
+    }
+
+    &__error-message {
+        color: red;
+    }
+}
