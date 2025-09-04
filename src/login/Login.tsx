@@ -76,6 +76,19 @@ function Login() {
                     />
                 </FormControl>
                 <Button disabled={loading} type="submit" variant="contained">Login</Button>
+                <Button
+                    disabled={loading}
+                    onClick={() => {
+                        formik.setValues({
+                            username: process.env.REACT_APP_GUEST_USER || '',
+                            password: process.env.REACT_APP_GUEST_PASSWORD || '',
+                        });
+                        formik.handleSubmit();
+                    }}
+                    variant="text"
+                >
+                    Enter as a guest
+                </Button>
                 {
                     showErrorMessage && 
                     <p className="login__error-message">Invalid username or password</p>
