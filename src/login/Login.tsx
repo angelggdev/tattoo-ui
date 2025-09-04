@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { authBody, useLogin, useRegister } from "../shared/hooks/useAuth.ts";
+import { authBody, useLogin, useRegister } from "../hooks/useAuth.ts";
 import './Login.scss';
 import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
@@ -11,7 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../shared/context/AuthContext.tsx";
+import { useAuthContext } from "../context/AuthContext.tsx";
 
 function Login() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -35,7 +35,7 @@ function Login() {
                 setLoading(false);
             } else {
                 authContext?.login(token);
-                navigate('home');
+                navigate('/home');
             }
         },
     });

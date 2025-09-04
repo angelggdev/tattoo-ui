@@ -1,0 +1,11 @@
+.transactions {
+    &__title {
+        text-align: center;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+}

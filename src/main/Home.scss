@@ -1,0 +1,21 @@
+.home {
+    min-height: 100vh;
+    width: 100vw;
+    position: relative;
+    background-color: #f4f5fa;
+    padding-bottom: 100px;
+
+    &__sidenav {
+        position: absolute;
+        height: 100%;
+        z-index: 1;
+        background-color: white;
+    }
+
+    &__table {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding-top: 50px;
+    }
+}

@@ -1,0 +1,10 @@
+.deleteTransactionModal{
+    &__title {
+        padding: 50px;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: center;
+    }
+}

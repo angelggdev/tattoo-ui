@@ -1,0 +1,23 @@
+.addSaleModal {
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+
+        &__row {
+            display: flex;
+            gap: 20px;
+        }
+
+        &__buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+    }
+}
+
+.fullWidth {
+    width: 223px;
+}
