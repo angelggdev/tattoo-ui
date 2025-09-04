@@ -18,12 +18,10 @@ function Transactions() {
     const [showDeleteTransactionModal, setShowDeleteTransactionModal] = useState<boolean>(false);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [transactionsToDelete, setTransactionsToDelete] = useState<string[]>([]);
+    
     const { getTransactions: fetchTransactions, loading: loadingTransactions } = useTransactions();
     const { deleteTransaction: fetchDeleteTransaction, loading: deletingTransactions } = useDeleteTransaction();
-    const openDeleteTransactionModal = (ids: string[]) => {
-        setTransactionsToDelete(ids)
-        setShowDeleteTransactionModal(true);
-    }
+
     const actions = useMemo(() => {
         return [
             {
@@ -44,6 +42,11 @@ function Transactions() {
         { name: 'Client', width: 100 },
         { name: 'Actions', width: 50 },
     ];
+
+    const openDeleteTransactionModal = (ids: string[]) => {
+        setTransactionsToDelete(ids)
+        setShowDeleteTransactionModal(true);
+    }
     const getTransactions = useCallback(async () => {
         await fetchTransactions()
             .then((res) => setTransactions(res));
