@@ -1,0 +1,19 @@
+@keyframes shake {
+    0% {
+        transform: rotate(-2deg);
+    }
+    50% {
+        transform: rotate(4deg);
+    }
+    100% {
+        transform: rotate(-2deg);
+    }
+}
+
+.loading-animation {
+    animation-name: shake;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in;
+    animation-duration: 0.3s;
+    animation-delay: 0s;
+}

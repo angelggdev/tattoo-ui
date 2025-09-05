@@ -43,7 +43,7 @@ function Login() {
     return (
         <div className="login__container">
             <form onSubmit={formik.handleSubmit} className="login__form">
-                <img src="/login-pic.jpg" alt="logo"/>
+                <img src="/login-pic.jpg" alt="logo" className={loading ? 'loading-animation' : ''}/>
                 <FormControl className="login__form__username">
                     <InputLabel htmlFor="username">Username</InputLabel>
                     <OutlinedInput

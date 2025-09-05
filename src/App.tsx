@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './login/Login.tsx';
-import Transactions from './main/transactions/Transactions.tsx';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import Home from './main/Home.tsx';
+import "./styles/index.scss";
 
 function App() {
   return (
