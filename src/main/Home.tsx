@@ -12,6 +12,11 @@ function Home() {
                 <SideNav />
             </div>
             <div className="home__table">
+                <header className="home__table__header">
+                    <h1 className="home__table__header__text">
+                        { section === 'transactions' ? 'Sales' : 'Employees' }
+                    </h1>
+                </header>
                 {
                     section === 'transactions' ?
                     <Transactions />

@@ -1,11 +1,26 @@
 .transactions {
-    &__title {
-        text-align: center;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 80vw;
 
     &__actions {
         display: flex;
         justify-content: flex-end;
         margin-bottom: 20px;
+    }
+}
+
+.row {
+    &__listItem {
+        display: flex;
+        justify-content: space-between;
+        height: 30px;
+        align-items: center;
+
+        &__title {
+            font-weight: 600;
+            text-transform: uppercase;
+        }
     }
 }
