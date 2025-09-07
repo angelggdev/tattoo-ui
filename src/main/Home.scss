@@ -35,3 +35,10 @@
         }
     }
 }
+
+@media (max-width: 650px) {
+    .home__table {
+        position: unset;
+        width: 100%;
+    }
+}

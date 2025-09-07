@@ -35,6 +35,7 @@ export function AddTransactionModal(props: {
             };
             addTransaction(transaction);
             props.getTransactions();
+            formik.resetForm();
             props.setOpen(false);
         },
     });

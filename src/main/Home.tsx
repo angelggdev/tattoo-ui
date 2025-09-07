@@ -1,4 +1,4 @@
-import { SideNav } from "./side-nav/SideNav.tsx";
+import { SideNav, TopNav } from "./side-nav/SideNav.tsx";
 import "./Home.scss";
 import { useState } from "react";
 import Transactions from "./transactions/Transactions.tsx";
@@ -8,9 +8,14 @@ function Home() {
 
     return (
         <div className="home">
-            <div className="home__sidenav">
-                <SideNav />
-            </div>
+            {
+                window.innerWidth > 650 ?
+                <div className="home__sidenav">
+                    <SideNav />
+                </div>
+                :
+                <TopNav />
+            }
             <div className="home__table">
                 <header className="home__table__header">
                     <h1 className="home__table__header__text">

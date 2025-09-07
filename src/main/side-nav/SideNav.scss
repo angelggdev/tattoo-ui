@@ -8,3 +8,12 @@
         width: 230px !important;
     }
 }
+
+.topnav {
+    display: flex;
+    box-shadow: 0 2px 2px -2px #888;
+    justify-content: center;
+    gap: 30px;
+    background-color: white;
+    margin-bottom: 20px;
+}

@@ -42,11 +42,8 @@
     }
 }
 
-@media (max-width: 400px) {
-    .login {
-        &__form {
-            padding: 25px;
-
-        }
+@media (max-width: 600px) {
+    .login__form {
+        padding: 25px;
     }
 }

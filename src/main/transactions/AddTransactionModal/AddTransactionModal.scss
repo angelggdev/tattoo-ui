@@ -21,3 +21,12 @@
 .fullWidth {
     width: 223px;
 }
+
+@media (max-width: 650px) {
+    .addSaleModal__form {
+        &__row {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+}

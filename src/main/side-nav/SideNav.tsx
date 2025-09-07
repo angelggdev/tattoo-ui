@@ -1,25 +1,26 @@
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { TableChart, Person } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import "./SideNav.scss";
 import { useState } from "react";
 
+const menu = [
+    {
+        title: 'Sales',
+        url: '/home/transactions',
+        icon: TableChart,
+    },
+    {
+        title: 'Employees',
+        url: '/home/employees',
+        icon: Person,
+    },
+];
+
 export function SideNav() {
     const [open, setOpen] = useState<boolean>(false);
     const [selectedOption, setSelectedOption] = useState<string>('');
     const navigate = useNavigate();
-    const menu = [
-        {
-            title: 'Sales',
-            url: '/home/transactions',
-            icon: TableChart,
-        },
-        {
-            title: 'Employees',
-            url: '/home/employees',
-            icon: Person,
-        },
-    ];
 
     const onMouseEnter = () => {
         setOpen(true);
@@ -62,6 +63,20 @@ export function SideNav() {
                     ))
                 }
             </List>
+        </div>
+    )
+}
+
+export function TopNav() {
+    const navigate = useNavigate();
+
+    return (
+        <div className="topnav">
+            {
+                menu.map((item) => {
+                    return <Button key={item.title} onClick={() => navigate(item.url)} variant="text">{item.title}</Button>
+                })
+            }
         </div>
     )
 }
