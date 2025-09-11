@@ -1,26 +1,13 @@
 import { Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { TableChart, Person } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Menu } from "@mui/icons-material";
 import "./SideNav.scss";
 import { useState } from "react";
-
-const menu = [
-    {
-        title: 'Sales',
-        url: '/home/transactions',
-        icon: TableChart,
-    },
-    {
-        title: 'Employees',
-        url: '/home/employees',
-        icon: Person,
-    },
-];
+import { useMenu } from "../../hooks/useMenu.ts";
 
 export function SideNav() {
     const [open, setOpen] = useState<boolean>(false);
     const [selectedOption, setSelectedOption] = useState<string>('');
-    const navigate = useNavigate();
+    const menu = useMenu();
 
     const onMouseEnter = () => {
         setOpen(true);
@@ -51,7 +38,7 @@ export function SideNav() {
                             key={item.title}
                             disablePadding
                         >
-                            <ListItemButton onClick={() => navigate(item.url)}>
+                            <ListItemButton onClick={item.action}>
                                 <ListItemIcon style={{
                                     color: selectedOption === item.title ? 'white' : 'black',
                                 }}>
@@ -68,15 +55,23 @@ export function SideNav() {
 }
 
 export function TopNav() {
-    const navigate = useNavigate();
+    const [showMenu, setShowMenu] = useState<boolean>(false);
+    const menu = useMenu();
 
     return (
-        <div className="topnav">
-            {
-                menu.map((item) => {
-                    return <Button key={item.title} onClick={() => navigate(item.url)} variant="text">{item.title}</Button>
-                })
-            }
-        </div>
+        <>
+            <Button className="topnav__menuButton" onClick={() => setShowMenu(!showMenu)}>
+                <Menu />
+            </Button>
+            <div className="topnav" style={{
+                display: showMenu ? 'flex' : 'none',
+            }}>
+                {
+                    menu.map((item) => {
+                        return <Button key={item.title} onClick={item.action} variant="text">{item.title}</Button>
+                    })
+                }
+            </div>
+        </>
     )
 }

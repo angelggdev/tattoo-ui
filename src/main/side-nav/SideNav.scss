@@ -10,10 +10,16 @@
 }
 
 .topnav {
-    display: flex;
     box-shadow: 0 2px 2px -2px #888;
     justify-content: center;
     gap: 30px;
     background-color: white;
     margin-bottom: 20px;
+    margin-top: 30px;
+
+    &__menuButton {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+    }
 }

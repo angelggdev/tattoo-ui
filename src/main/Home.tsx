@@ -9,15 +9,17 @@ function Home() {
     return (
         <div className="home">
             {
-                window.innerWidth > 650 ?
+                window.innerWidth > 650 &&
                 <div className="home__sidenav">
                     <SideNav />
                 </div>
-                :
-                <TopNav />
             }
             <div className="home__table">
                 <header className="home__table__header">
+                    {
+                        window.innerWidth < 650 && 
+                        <TopNav />
+                    }
                     <h1 className="home__table__header__text">
                         { section === 'transactions' ? 'Sales' : 'Employees' }
                     </h1>

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAuthContext } from "../context/AuthContext.tsx";
 import { service } from "./useTransactions.ts";
 
 export interface Employee {
@@ -11,35 +10,35 @@ export interface Employee {
 
 export const useEmployees = () => {
     const [employees, setEmployees] = useState<Employee[]>([]);
-    const authContext = useAuthContext();
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/api/employees`, {
             headers: {
-                "Authorization": authContext?.token || '',
+                "Authorization": token || '',
             },
             method: "GET",
         })
             .then(res => res.json())
             .then(res => setEmployees(res)); 
-    }, [authContext?.token]);
+    }, [token]);
     
     return { employees };
 }
 
 export const useGetEmployeeServices = () => {
-    const authContext = useAuthContext();
+    const token = localStorage.getItem('token');
 
     const getEmployeeServices = useCallback((employeeId: string) => {
         return fetch(`${process.env.REACT_APP_API_URL}/api/employees/${employeeId}/services`, {
             headers: {
-                "Authorization": authContext?.token || '',
+                "Authorization": token || '',
             },
             method: "GET",
         })
             .then(res => res.json())
             .then(res => res);
-    }, [authContext?.token]);
+    }, [token]);
 
     return { getEmployeeServices };
 }

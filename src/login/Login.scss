@@ -29,7 +29,11 @@
         }
 
         &__username {
-            width: 260px
+            width: 260px;
+
+            input {
+                width: 100%;
+            }
         }
 
         img {

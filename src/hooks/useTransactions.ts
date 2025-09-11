@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { useAuthContext } from "../context/AuthContext.tsx";
 
 export type service = 'Tattoo' | 'Piercing';
 
@@ -10,21 +9,21 @@ export interface Transaction {
     employee_name: string;
     employee_lastname: string;
     service: service[];
-    amount: Number;
+    amount: number;
     details: string;
     client_name: string;
-    client_phone: Number;
+    client_phone: number;
     client_mail: string;
 };
 
 export function useTransactions() {
     const [loading, setLoading] = useState<boolean>(false);
-    const authContext = useAuthContext();
+    const token = localStorage.getItem('token');
     const getTransactions = useCallback(() => {
         setLoading(true);
         return fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
             headers: {
-                "Authorization": authContext?.token || '',
+                "Authorization": token || '',
             },
             method: "GET",
         })
@@ -33,18 +32,18 @@ export function useTransactions() {
                 setLoading(false);
                 return res;
             });
-    }, [authContext?.token]);
+    }, [token]);
 
     return { loading, getTransactions };
 }
 
 export function useAddTransaction() {
-    const authContext = useAuthContext();
+    const token = localStorage.getItem('token');
 
     const addTransaction = (value: Partial<Transaction>) => {
-        fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
+        return fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
             headers: {
-                "Authorization": authContext?.token || '',
+                "Authorization": token || '',
                 "Content-Type": "application/json",
             },
             method: "POST",
@@ -58,13 +57,14 @@ export function useAddTransaction() {
 }
 
 export function useDeleteTransaction() {
-    const authContext = useAuthContext();
+    const token = localStorage.getItem('token');
     const [loading, setLoading] = useState<boolean>(false);
+
     const deleteTransaction = (ids: string[]) => {
         setLoading(true);
         fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
             headers: {
-                "Authorization": authContext?.token || '',
+                "Authorization": token || '',
                 "Content-Type": "application/json",
             },
             method: "DELETE",

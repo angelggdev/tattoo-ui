@@ -33,8 +33,7 @@ export function AddTransactionModal(props: {
                 date: new Date(values.date).toISOString(),
                 amount: Number(values.amount),
             };
-            addTransaction(transaction);
-            props.getTransactions();
+            addTransaction(transaction).then(() => props.getTransactions());
             formik.resetForm();
             props.setOpen(false);
         },

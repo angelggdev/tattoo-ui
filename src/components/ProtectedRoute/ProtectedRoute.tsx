@@ -10,7 +10,7 @@ function ProtectedRoute() {
 
     useEffect(() => {
         const isAuthenticated = async () => {
-            const token = authContext?.token;
+            const token = localStorage.getItem('token');
             if (token) {
                 const valid = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/verify-token`, { 
                     method: 'POST',
@@ -22,7 +22,7 @@ function ProtectedRoute() {
                 if (valid) {
                     setIsValid(true);
                 } else {
-                    authContext.logout();
+                    authContext?.logout();
                     setIsValid(false);
                 }
                 setReadyToRedirect(true);
