@@ -1,9 +1,10 @@
 import { useFormik } from "formik";
 import { Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select } from "@mui/material";
-import { service, useAddTransaction } from "../../../hooks/useTransactions.ts";
+import { AddTransaction, service, useAddTransaction } from "../../../hooks/useTransactions.ts";
 import "./AddTransactionModal.scss";
 import { Employee, useEmployees, useGetEmployeeServices } from "../../../hooks/useEmployees.ts";
 import { useEffect, useState } from "react";
+import DateField from "../../../components/DateField/DateField.tsx";
 
 export function AddTransactionModal(props: {
     open: boolean,
@@ -15,14 +16,14 @@ export function AddTransactionModal(props: {
     const { employees } = useEmployees();
     const { getEmployeeServices } = useGetEmployeeServices();
     const [services, setServices] = useState<service[]>([]);
-    const formik = useFormik({
+    const formik = useFormik<AddTransaction>({
         initialValues: {
-            date: '',
+            date: null,
             employee_id: '',
             employee_name: '',
             employee_lastname: '',
             service: [] as service[],
-            amount: '',
+            amount: null,
             details: '',
             client_name: '',
             employee: {} as Employee,
@@ -30,7 +31,6 @@ export function AddTransactionModal(props: {
         onSubmit: (values) => {
             const transaction = {
                 ...values,
-                date: new Date(values.date).toISOString(),
                 amount: Number(values.amount),
             };
             addTransaction(transaction).then(() => props.getTransactions());
@@ -53,14 +53,13 @@ export function AddTransactionModal(props: {
                 <form onSubmit={formik.handleSubmit} className="addSaleModal__form">
                     <div className="addSaleModal__form__row">
                         <FormControl>
-                            <OutlinedInput
-                                id="date"
-                                type="date"
-                                disabled={formik.isSubmitting}
-                                onChange={formik.handleChange}
+                             <DateField
+                                label="Date"
+                                onChange={(value) => formik.setValues({
+                                    ...formik.values,
+                                    date: value,
+                                })}
                                 value={formik.values.date}
-                                required={true}
-                                className="fullWidth"
                             />
                         </FormControl>
                         <FormControl>
@@ -84,11 +83,12 @@ export function AddTransactionModal(props: {
                                 }}
                                 disabled={formik.isSubmitting}
                                 className="fullWidth"
+                                data-testid="employee-select"
                             >
                                 {
                                     employees.map((employee) => {
                                         return (
-                                            <MenuItem key={employee._id} value={employee._id}>
+                                            <MenuItem disableRipple key={employee._id} value={employee._id} data-testid={`${employee.name} ${employee.lastname}`}>
                                                 {`${employee.name} ${employee.lastname}`}
                                             </MenuItem>
                                         )
@@ -113,12 +113,13 @@ export function AddTransactionModal(props: {
                                 disabled={!services.length || formik.isSubmitting}
                                 multiple
                                 renderValue={(selected) => selected.join(', ')}
+                                data-testid="service-select"
                             >
                                 {
                                     services.map((service) => {
                                         return (
-                                            <MenuItem key={service} value={service}>
-                                                <Checkbox checked={formik.values.service.includes(service)} />
+                                            <MenuItem disableRipple key={service} value={service}>
+                                                <Checkbox disableRipple checked={formik.values.service.includes(service)} />
                                                 <ListItemText primary={service} />
                                             </MenuItem>
                                         )
@@ -136,6 +137,7 @@ export function AddTransactionModal(props: {
                                 onChange={formik.handleChange}
                                 value={formik.values.amount}
                                 required={true}
+                                data-testid="amount-input"
                             />
                         </FormControl>
                     </div>
@@ -148,6 +150,7 @@ export function AddTransactionModal(props: {
                                 disabled={formik.isSubmitting}
                                 onChange={formik.handleChange}
                                 value={formik.values.details}
+                                data-testid="details-input"
                             />
                         </FormControl>
                         <FormControl>
@@ -158,14 +161,16 @@ export function AddTransactionModal(props: {
                                 disabled={formik.isSubmitting}
                                 onChange={formik.handleChange}
                                 value={formik.values.client_name}
+                                data-testid="client-name-input"
                             />
                         </FormControl>
                     </div>
                     <div className="addSaleModal__form__buttons">
-                        <Button type="submit" variant="contained">
+                        <Button disableRipple type="submit" variant="contained">
                             Add
                         </Button>
                         <Button
+                            disableRipple
                             variant="outlined" 
                             onClick={() => {
                                 props.handleClose();

@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Transaction, useDeleteTransaction, useTransactions } from "../../hooks/useTransactions.ts";
+import { SearchTransactions, Transaction, useDeleteTransaction, useSearchTransactions, useTransactions } from "../../hooks/useTransactions.ts";
 import { Button, SvgIconTypeMap, TablePagination } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AddTransactionModal } from "./AddTransactionModal/AddTransactionModal.tsx";
@@ -15,6 +15,7 @@ import { DeleteTransactionModal } from "./DeleteTransactionModal/DeleteTransacti
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import Row from "./Row/Row.tsx";
 import { BarChart } from '@mui/x-charts/BarChart';
+import TransactionFilters from "./TransactionFilters/TransactionFilters.tsx";
 
 export type action = {
     id: string;
@@ -30,6 +31,7 @@ export default function Transactions() {
     const [page, setPage] = useState<number>(0);
     
     const { getTransactions: fetchTransactions, loading: loadingTransactions } = useTransactions();
+    const { searchTransactions: fetchSearchTransactions, loading: loadingSearch } = useSearchTransactions();
     const { deleteTransaction: fetchDeleteTransaction, loading: deletingTransactions } = useDeleteTransaction();
 
     const actions: action[] = useMemo(() => {
@@ -56,23 +58,27 @@ export default function Transactions() {
     const openDeleteTransactionModal = (ids: string[]) => {
         setTransactionsToDelete(ids)
         setShowDeleteTransactionModal(true);
-    }
+    };
     const getTransactions = useCallback(async () => {
         await fetchTransactions()
             .then((res) => setTransactions(res));
     }, [fetchTransactions]);
+    const searchTransactions = useCallback(async (values: SearchTransactions) => {
+        await fetchSearchTransactions(values)
+            .then((res) => setTransactions(res));
+    }, [fetchSearchTransactions]);
     const deleteTransaction = (ids: string[]) => {
         fetchDeleteTransaction(ids);
         getTransactions();
         setShowDeleteTransactionModal(false);
-    }
+    };
 
     useEffect(() => {
         getTransactions();
     }, [getTransactions]);
 
     const EmptyTable = () => {
-        return ((loadingTransactions || deletingTransactions) ? 
+        return ((loadingTransactions || deletingTransactions || loadingSearch) ? 
             <TableRow>
                 <TableCell>Loading...</TableCell>
             </TableRow>
@@ -85,8 +91,8 @@ export default function Transactions() {
 
     // Chart data
     const chartData = useMemo(() => {
-        const amountByDates = transactions.reduce((acc, currentValue) => {
-            const date = new Date(currentValue.date).toLocaleDateString();
+        const amountByDates = transactions.reduce((acc: { [key: string]: number}, currentValue) => {
+            const date = new Date(currentValue.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' });
             acc[date] = (acc[date] || 0) + currentValue.amount;
             return acc;
         }, {})
@@ -95,7 +101,7 @@ export default function Transactions() {
                 amount: amountByDates[key],
                 date: key,
             }
-        });
+        }).splice(0, 10);
         return data;
     }, [transactions]);
 
@@ -106,12 +112,13 @@ export default function Transactions() {
 
     return (
         <div className="transactions">
-            <div>
+            <div className="transactions__table-container">
                 <div className="transactions__actions">
+                    <TransactionFilters onSubmit={searchTransactions}/>
                     <Button variant="outlined" onClick={() => setShowAddSaleModal(true)}>Add sale</Button>
                 </div>
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: '60vw' }} aria-label="simple table">
+                <TableContainer component={Paper} sx={{ width: '60vw' }}>
+                    <Table sx={{ maxWidth: '60vw' }} aria-label="simple table">
                         {
                             window.innerWidth > 650 ?
                             <>
@@ -127,7 +134,7 @@ export default function Transactions() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                {(transactions.length && (!loadingTransactions || deletingTransactions)) ? 
+                                {(transactions.length && !loadingTransactions && !deletingTransactions && !loadingSearch) ? 
                                     transactions.slice(page * 10, page * 10 + 10).map((row) => (
                                         <TableRow
                                             key={row._id}
@@ -160,7 +167,7 @@ export default function Transactions() {
                             <>
                                 <TableBody>
                                     {
-                                        transactions.length && (!loadingTransactions || deletingTransactions) ? 
+                                        (transactions.length && !loadingTransactions && !deletingTransactions && !loadingSearch) ? 
                                         transactions.slice(page * 10, page * 10 + 10).map((row) => (
                                             <Row key={row._id} row={row} actions={actions} />
                                         ))

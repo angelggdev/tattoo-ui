@@ -18,7 +18,9 @@ function ProtectedRoute() {
                         "Content-type": "application/json"
                     },
                     body: JSON.stringify({token}),
-                });
+                })
+                    .then((res) => res.json())
+                    .then((res) => res.valid);
                 if (valid) {
                     setIsValid(true);
                 } else {

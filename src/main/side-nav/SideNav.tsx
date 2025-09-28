@@ -38,7 +38,7 @@ export function SideNav() {
                             key={item.title}
                             disablePadding
                         >
-                            <ListItemButton onClick={item.action}>
+                            <ListItemButton disableRipple onClick={item.action}>
                                 <ListItemIcon style={{
                                     color: selectedOption === item.title ? 'white' : 'black',
                                 }}>
@@ -60,7 +60,7 @@ export function TopNav() {
 
     return (
         <>
-            <Button className="topnav__menuButton" onClick={() => setShowMenu(!showMenu)}>
+            <Button className="topnav__menuButton" onClick={() => setShowMenu(!showMenu)} data-testid="topnav-button">
                 <Menu />
             </Button>
             <div className="topnav" style={{

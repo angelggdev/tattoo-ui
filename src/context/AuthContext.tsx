@@ -1,8 +1,8 @@
-import { createContext, useContext } from "react";
+import { createContext, ReactNode, useContext } from "react";
 
-const AuthContext = createContext<{login: (newToken) => void; logout: () => void} | null>(null);
+const AuthContext = createContext<{login: (newToken: string) => void; logout: () => void} | null>(null);
 
-export function AuthProvider({ children }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
     const login = (newToken: string) => {
         localStorage.setItem('token', newToken);
     };

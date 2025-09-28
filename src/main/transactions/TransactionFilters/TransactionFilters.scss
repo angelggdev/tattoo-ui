@@ -1,0 +1,26 @@
+.filters {
+    &__collapse {
+        display: flex;
+    }
+
+    &__form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        .marginTop {
+            margin-top: 8px;
+        }
+
+        &__select {
+            width: 160px;
+        }
+    }
+}
+
+@media (max-width: 650px) {
+    .filters__form {
+        flex-direction: column;
+    }
+}

@@ -36,7 +36,7 @@ export default function Row(props: {row: Transaction, actions: action[]}) {
             </TableRow>
             <TableRow className="row" sx={{ backgroundColor: '#f4f5fa', width: '100%' }}>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
-                    <Collapse in={open} >
+                    <Collapse in={open}>
                         <ul>
                             <li className="row__listItem">
                                 <p className='row__listItem__title'>Date:</p>
