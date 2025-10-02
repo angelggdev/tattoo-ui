@@ -1,0 +1,10 @@
+jobs:
+  trigger-cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cypress tests
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: angelggdev/tattoo-ui-automation
+          event-type: run-cypress
