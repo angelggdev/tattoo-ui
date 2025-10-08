@@ -10,6 +10,6 @@ jobs:
       - name: Trigger Cypress tests
         uses: peter-evans/repository-dispatch@v2
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.CYPRESS_TRIGGER_TOKEN }}
           repository: angelggdev/tattoo-ui-automation
           event-type: run-cypress
