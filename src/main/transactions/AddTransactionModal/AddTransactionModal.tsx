@@ -53,8 +53,8 @@ export function AddTransactionModal(props: {
                 <form onSubmit={formik.handleSubmit} className="addSaleModal__form">
                     <div className="addSaleModal__form__row">
                         <FormControl>
-                             <DateField
-                                label="Date"
+                            <DateField
+                                label="Fecha"
                                 onChange={(value) => formik.setValues({
                                     ...formik.values,
                                     date: value,
@@ -63,12 +63,13 @@ export function AddTransactionModal(props: {
                             />
                         </FormControl>
                         <FormControl>
-                            <InputLabel id="employee-label">Employee</InputLabel>
+                            <InputLabel id="employee-label">Empleado</InputLabel>
                             <Select
+                                sx={{ width: '200px' }}
                                 labelId="employee-label"
                                 id="employee_id"
                                 value={formik.values.employee_id}
-                                label="Employee"
+                                label="Empleado"
                                 onChange={(event) => {
                                     const employee = employees.find((employee) => employee._id === event.target.value);
                                     if (employee) {
@@ -82,7 +83,6 @@ export function AddTransactionModal(props: {
                                     }
                                 }}
                                 disabled={formik.isSubmitting}
-                                className="fullWidth"
                                 data-testid="employee-select"
                             >
                                 {
@@ -99,17 +99,17 @@ export function AddTransactionModal(props: {
                     </div>
                     <div className="addSaleModal__form__row">
                        <FormControl>
-                            <InputLabel id="service-label">Services</InputLabel>
+                            <InputLabel id="service-label">Servicio</InputLabel>
                             <Select
+                                sx={{ width: '200px' }}
                                 labelId="service-label"
                                 id="service"
                                 value={formik.values.service}
-                                label="Services"
+                                label="Servicio"
                                 onChange={(event) => formik.setValues({
                                     ...formik.values,
                                     service: typeof event.target.value === 'string' ? [] : event.target.value,
                                 })}
-                                className="fullWidth"
                                 disabled={!services.length || formik.isSubmitting}
                                 multiple
                                 renderValue={(selected) => selected.join(', ')}
@@ -128,10 +128,11 @@ export function AddTransactionModal(props: {
                             </Select>
                         </FormControl>
                         <FormControl>
-                            <InputLabel htmlFor="amount">Amount</InputLabel>
+                            <InputLabel htmlFor="amount">Monto</InputLabel>
                             <OutlinedInput
+                                sx={{ width: '200px' }}
                                 id="amount"
-                                label="Amount"
+                                label="Monto"
                                 type="number"
                                 disabled={formik.isSubmitting}
                                 onChange={formik.handleChange}
@@ -143,10 +144,11 @@ export function AddTransactionModal(props: {
                     </div>
                     <div className="addSaleModal__form__row">
                         <FormControl>
-                            <InputLabel htmlFor="details">Details</InputLabel>
+                            <InputLabel htmlFor="details">Detalles</InputLabel>
                             <OutlinedInput
+                                sx={{ width: '200px' }}
                                 id="details"
-                                label="Details"
+                                label="Detalles"
                                 disabled={formik.isSubmitting}
                                 onChange={formik.handleChange}
                                 value={formik.values.details}
@@ -154,10 +156,11 @@ export function AddTransactionModal(props: {
                             />
                         </FormControl>
                         <FormControl>
-                            <InputLabel htmlFor="client_name">Client Name</InputLabel>
+                            <InputLabel htmlFor="client_name">Nombre del cliente</InputLabel>
                             <OutlinedInput
+                                sx={{ width: '200px' }}
                                 id="client_name"
-                                label="Client Name"
+                                label="Nombre del cliente"
                                 disabled={formik.isSubmitting}
                                 onChange={formik.handleChange}
                                 value={formik.values.client_name}
@@ -166,8 +169,8 @@ export function AddTransactionModal(props: {
                         </FormControl>
                     </div>
                     <div className="addSaleModal__form__buttons">
-                        <Button disableRipple type="submit" variant="contained">
-                            Add
+                        <Button disableRipple type="submit" variant="contained" data-testid="add-sale-modal-button">
+                            Agregar
                         </Button>
                         <Button
                             disableRipple
@@ -177,8 +180,9 @@ export function AddTransactionModal(props: {
                                 formik.resetForm();
                                 setServices([]);
                             }}
+                            data-testid="cancel-add-sale-button"
                         >
-                            Cancel
+                            Cancelar
                         </Button>
                     </div>
                 </form>

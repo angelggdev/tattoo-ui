@@ -8,22 +8,25 @@ export function useMenu() {
 
     return [
         {
-            title: 'Sales',
+            title: 'Ventas',
             action: () => navigate('/home/transactions'),
             icon: TableChart,
+            testId: 'sidenav-sales',
         },
         {
-            title: 'Employees',
+            title: 'Empleados',
             acion: () => navigate('/home/employees'),
             icon: Person,
+            testId: 'sidenav-employees',
         },
         {
-            title: 'Logout',
+            title: 'Salir',
             action: () => {
                 authContext?.logout();
                 navigate('/auth/login');
             },
             icon: Logout,
+            testId: 'sidenav-logout',
         }
     ];
 }

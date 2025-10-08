@@ -20,6 +20,7 @@ export function SideNav() {
     return (
         <div
             className="sidenav" 
+            data-testid="sidenav"
             style={{ width: open ? '250px' : '70px' }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
@@ -37,6 +38,7 @@ export function SideNav() {
                             className="sidenav__button"
                             key={item.title}
                             disablePadding
+                            data-testid={item.testId}
                         >
                             <ListItemButton disableRipple onClick={item.action}>
                                 <ListItemIcon style={{

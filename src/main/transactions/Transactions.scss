@@ -4,8 +4,9 @@
 
     &__actions {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         margin-bottom: 20px;
+        width: 100%;
 
         button {
             height: 50px;

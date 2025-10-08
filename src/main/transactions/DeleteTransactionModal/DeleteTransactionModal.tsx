@@ -6,15 +6,15 @@ export function DeleteTransactionModal(props: {
     open: boolean,
     handleClose: () => void,
     setOpen: (open: boolean) => void
-    deleteTransaction: (ids) => void
+    deleteTransaction: (ids: string[]) => void
 }) {
 
     return (
         <Dialog open={props.open}>
-            <DialogTitle className="deleteTransactionModal__title">Delete Sale?</DialogTitle>
+            <DialogTitle className="deleteTransactionModal__title" data-testid="delete-sale-title">¿Borrar?</DialogTitle>
             <DialogActions className="deleteTransactionModal__actions">
-                <Button onClick={() => props.deleteTransaction(props.transactionIds)}>Yes</Button>
-                <Button onClick={props.handleClose}>No</Button>
+                <Button onClick={() => props.deleteTransaction(props.transactionIds)} data-testid="delete-sale-yes-button">Si</Button>
+                <Button onClick={props.handleClose} data-testid="delete-sale-no-button">No</Button>
             </DialogActions>
         </Dialog>
     );

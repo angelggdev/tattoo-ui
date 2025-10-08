@@ -50,8 +50,8 @@ describe('AddTransactionModal', () => {
        expect(screen.getByTestId('amount-input')).toBeInTheDocument();
        expect(screen.getByTestId('details-input')).toBeInTheDocument();
        expect(screen.getByTestId('client-name-input')).toBeInTheDocument();
-       expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
-       expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+       expect(screen.getByRole('button', { name: 'Agregar' })).toBeInTheDocument();
+       expect(screen.getByRole('button', { name: 'Cancelar' })).toBeInTheDocument();
     });
 
     /* test('User can fill the form and submit', async () => {

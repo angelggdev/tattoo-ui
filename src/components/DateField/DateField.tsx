@@ -11,8 +11,8 @@ export default function DateField(props: {
 }) {
     return (
         <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DemoContainer components={['DatePicker']}>
-                <DatePicker sx={{ width: '160px !important' }} label={props.label} value={props.value} onChange={props.onChange}/>
+            <DemoContainer  sx={{ width: '200px !important', paddingTop: 0 }} components={['DatePicker']}>
+                <DatePicker label={props.label} value={props.value} onChange={props.onChange}/>
             </DemoContainer>
         </LocalizationProvider>
     );

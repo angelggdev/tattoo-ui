@@ -10,7 +10,7 @@ import { SearchTransactions, Transaction, useDeleteTransaction, useSearchTransac
 import { Button, SvgIconTypeMap, TablePagination } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AddTransactionModal } from "./AddTransactionModal/AddTransactionModal.tsx";
-import { Delete } from "@mui/icons-material";
+import { Add, Delete } from "@mui/icons-material";
 import { DeleteTransactionModal } from "./DeleteTransactionModal/DeleteTransactionModal.tsx";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import Row from "./Row/Row.tsx";
@@ -45,14 +45,14 @@ export default function Transactions() {
             },
         ];
     }, []);
-    const columnData: Array<{ name: string; width: number; }> = [
-        { name: 'Date', width: 100 },
-        { name: 'Name', width: 100 },
-        { name: 'Services', width: 100 },
-        { name: 'Amount', width: 50 },
-        { name: 'Details', width: 150 },
-        { name: 'Client', width: 100 },
-        { name: 'Actions', width: 50 },
+    const columnData: Array<{ name: string; width: number; testId: string }> = [
+        { name: 'Fecha', width: 100, testId: 'transactions-table-date' },
+        { name: 'Nombre', width: 100, testId: 'transactions-table-name' },
+        { name: 'Servicios', width: 100, testId: 'transactions-table-services' },
+        { name: 'Monto', width: 50, testId: 'transactions-table-amount' },
+        { name: 'Detalles', width: 150, testId: 'transactions-table-details' },
+        { name: 'Cliente', width: 100, testId: 'transactions-table-client' },
+        { name: 'Acciones', width: 50, testId: 'transactions-table-actions' },
     ];
 
     const openDeleteTransactionModal = (ids: string[]) => {
@@ -80,11 +80,11 @@ export default function Transactions() {
     const EmptyTable = () => {
         return ((loadingTransactions || deletingTransactions || loadingSearch) ? 
             <TableRow>
-                <TableCell>Loading...</TableCell>
+                <TableCell>Cargando...</TableCell>
             </TableRow>
             :
             <TableRow>
-                <TableCell>No results</TableCell>
+                <TableCell>Sin resultados</TableCell>
             </TableRow>
         );
     }
@@ -92,7 +92,7 @@ export default function Transactions() {
     // Chart data
     const chartData = useMemo(() => {
         const amountByDates = transactions.reduce((acc: { [key: string]: number}, currentValue) => {
-            const date = new Date(currentValue.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' });
+            const date = new Date(currentValue.date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
             acc[date] = (acc[date] || 0) + currentValue.amount;
             return acc;
         }, {})
@@ -115,9 +115,9 @@ export default function Transactions() {
             <div className="transactions__table-container">
                 <div className="transactions__actions">
                     <TransactionFilters onSubmit={searchTransactions}/>
-                    <Button variant="outlined" onClick={() => setShowAddSaleModal(true)}>Add sale</Button>
+                    <Button variant="outlined" onClick={() => setShowAddSaleModal(true)} data-testid="add-sale-button"><Add/></Button>
                 </div>
-                <TableContainer component={Paper} sx={{ width: '60vw' }}>
+                <TableContainer component={Paper}>
                     <Table sx={{ maxWidth: '60vw' }} aria-label="simple table">
                         {
                             window.innerWidth > 650 ?
@@ -127,7 +127,7 @@ export default function Transactions() {
                                         {
                                             columnData.map((column) => {
                                                 return (
-                                                    <TableCell key={column.name} sx={{ width: column.width }}>{column.name}</TableCell>
+                                                    <TableCell data-testid={column.testId} key={column.name} sx={{ width: column.width }}>{column.name}</TableCell>
                                                 )
                                             })
                                         }
@@ -139,7 +139,7 @@ export default function Transactions() {
                                         <TableRow
                                             key={row._id}
                                         >
-                                            <TableCell>{new Date(row.date).toLocaleDateString()}</TableCell>
+                                            <TableCell>{new Date(row.date).toLocaleDateString('es-ES')}</TableCell>
                                             <TableCell>{`${row.employee_name} ${row.employee_lastname}`}</TableCell>
                                             <TableCell>{row.service.join(', ')}</TableCell>
                                             <TableCell>{row.amount.toString()}</TableCell>
@@ -189,7 +189,7 @@ export default function Transactions() {
                 />
             </div>
             {
-                window.innerWidth > 650 &&
+               /*  window.innerWidth > 650 &&
                 <div style={{ width: '30vw' }}>
                     <BarChart
                         yAxis={[{ label: 'Amount', width: 100 }]}
@@ -198,7 +198,7 @@ export default function Transactions() {
                         dataset={chartData}
                         height={300}
                     />
-                </div>
+                </div> */
             }
             <AddTransactionModal open={showAddSaleModal} handleClose={() => setShowAddSaleModal(false)} setOpen={setShowAddSaleModal} getTransactions={getTransactions}/>
             <DeleteTransactionModal

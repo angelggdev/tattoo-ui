@@ -21,7 +21,7 @@ function Home() {
                         <TopNav />
                     }
                     <h1 className="home__table__header__text">
-                        { section === 'transactions' ? 'Sales' : 'Employees' }
+                        { section === 'transactions' ? 'Ventas' : 'Empleados' }
                     </h1>
                 </header>
                 {

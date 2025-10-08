@@ -45,7 +45,7 @@ function Login() {
             <form onSubmit={formik.handleSubmit} className="login__form">
                 <img src="/login-pic.jpg" alt="logo" className={loading ? 'loading-animation' : ''}/>
                 <FormControl className="login__form__username">
-                    <InputLabel htmlFor="username">Username</InputLabel>
+                    <InputLabel htmlFor="username">Usuario</InputLabel>
                     <OutlinedInput
                         id="username"
                         label="Username"
@@ -55,7 +55,7 @@ function Login() {
                     />
                 </FormControl>
                 <FormControl>
-                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <InputLabel htmlFor="password">Contraseña</InputLabel>
                     <OutlinedInput
                         id="password"
                         label="Password"
@@ -75,7 +75,7 @@ function Login() {
                         }
                     />
                 </FormControl>
-                <Button disabled={loading} type="submit" variant="contained">Login</Button>
+                <Button disabled={loading} type="submit" variant="contained">Ingresar</Button>
                 <Button
                     disabled={loading}
                     onClick={() => {
@@ -86,12 +86,13 @@ function Login() {
                         formik.handleSubmit();
                     }}
                     variant="text"
+                    data-testid="enter-as-a-guest"
                 >
-                    Enter as a guest
+                    Ingresar como invitado
                 </Button>
                 {
                     showErrorMessage && 
-                    <p className="login__error-message">Invalid username or password</p>
+                    <p className="login__error-message" data-testid="error-message">Nombre de usuario o contraseña incorrectos</p>
                 }
             </form>
         </div>

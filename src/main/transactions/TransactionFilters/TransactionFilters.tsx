@@ -28,44 +28,53 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
     });
 
     return (
-        <div className="filters">
-            <Button variant="text" onClick={() => setOpen(!open)}>
+        <div className="filters" data-testid="filters">
+            <Button variant="text" onClick={() => setOpen(!open)} data-testid="filters-button">
                 {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                <p>Filters</p>
+                <p>Filtros</p>
             </Button>
             <Collapse in={open}>
                 <form onSubmit={formik.handleSubmit} className="filters__form">
                     <FormControl>
                         <DateField
-                            label="Start Date"
-                            onChange={(value) => formik.setValues({
-                                ...formik.values,
-                                start_date: value,
-                            })}
+                            label="Fecha inicial"
+                            onChange={(value) => {
+                                formik.setValues({
+                                    ...formik.values,
+                                    start_date: value,
+                                });
+                                formik.handleSubmit();
+                            }}
                             value={formik.values.start_date}
                         />
                     </FormControl>
                     <FormControl>
                         <DateField
-                            label="End Date"
-                            onChange={(value) => formik.setValues({
-                                ...formik.values,
-                                end_date: value,
-                            })}
+                            label="Fecha final"
+                            onChange={(value) => {
+                                    formik.setValues({
+                                    ...formik.values,
+                                    end_date: value,
+                                });
+                                formik.handleSubmit();
+                            }}
                             value={formik.values.end_date}
                         />
                     </FormControl>
-                    <FormControl className="marginTop">
-                        <InputLabel id="employee-label">Employee</InputLabel>
+                    <FormControl>
+                        <InputLabel id="employee-label">Empleado</InputLabel>
                         <Select
                             labelId="employee-label"
                             id="employee_id"
                             value={formik.values.employee_id}
                             label="Employee"
-                            onChange={(event) => formik.setValues({
-                                ...formik.values,
-                                employee_id: event.target.value,
-                            })}
+                            onChange={(event) => {
+                                formik.setValues({
+                                    ...formik.values,
+                                    employee_id: event.target.value,
+                                });
+                                formik.handleSubmit();
+                            }}
                             className="filters__form__select"
                         >
                             {
@@ -79,7 +88,7 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                             }
                         </Select>
                     </FormControl>
-                    <FormControl className="marginTop">
+                    {/* <FormControl className="marginTop">
                         <InputLabel id="service-label">Service</InputLabel>
                         <Select
                             labelId="service-label"
@@ -102,9 +111,17 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                                 })
                             }
                         </Select>
-                    </FormControl>
-                    <Button className="marginTop" type="submit" variant="contained">Search</Button>
-                    <Button className="marginTop" variant="text" onClick={() => formik.resetForm}>Clear</Button>
+                    </FormControl> */}
+                    <Button
+                        className="marginTop"
+                        variant="text"
+                        onClick={() => {
+                            formik.resetForm();
+                            formik.handleSubmit();
+                        }}
+                    >
+                        Borrar
+                    </Button>
                 </form>
             </Collapse>
         </div>
