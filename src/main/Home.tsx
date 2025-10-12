@@ -1,10 +1,18 @@
 import { SideNav, TopNav } from "./side-nav/SideNav.tsx";
 import "./Home.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Transactions from "./transactions/Transactions.tsx";
+import Employees from "./employees/Employees.tsx";
+import { useParams } from "react-router-dom";
 
 function Home() {
-    const [section, setSection] = useState<'transactions' | 'employees'>('transactions');
+    const [section, setSection] = useState<string>('transactions');
+    const { '*': params } = useParams();
+
+    useEffect(() => {
+        const section = params?.split('home/')[1];
+        if (section) setSection(section);
+    }, [params])
 
     return (
         <div className="home">
@@ -28,7 +36,7 @@ function Home() {
                     section === 'transactions' ?
                     <Transactions />
                     :
-                    <></>
+                    <Employees />
                 }
             </div>
         </div>

@@ -15,7 +15,7 @@ export function useMenu() {
         },
         {
             title: 'Empleados',
-            acion: () => navigate('/home/employees'),
+            action: () => navigate('/home/employees'),
             icon: Person,
             testId: 'sidenav-employees',
         },

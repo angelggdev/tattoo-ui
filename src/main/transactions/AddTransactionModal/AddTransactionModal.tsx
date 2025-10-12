@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select } from "@mui/material";
 import { AddTransaction, service, useAddTransaction } from "../../../hooks/useTransactions.ts";
 import "./AddTransactionModal.scss";
-import { Employee, useEmployees, useGetEmployeeServices } from "../../../hooks/useEmployees.ts";
+import { Employee, useGetEmployeeServices } from "../../../hooks/useEmployees.ts";
 import { useEffect, useState } from "react";
 import DateField from "../../../components/DateField/DateField.tsx";
 
@@ -11,9 +11,9 @@ export function AddTransactionModal(props: {
     handleClose: () => void,
     setOpen: (open: boolean) => void,
     getTransactions: () => void,
+    employees: Employee[],
 }) {
     const { addTransaction } = useAddTransaction();
-    const { employees } = useEmployees();
     const { getEmployeeServices } = useGetEmployeeServices();
     const [services, setServices] = useState<service[]>([]);
     const formik = useFormik<AddTransaction>({
@@ -48,7 +48,7 @@ export function AddTransactionModal(props: {
     
     return (
         <Dialog open={props.open}>
-            <DialogTitle>Add Sale</DialogTitle>
+            <DialogTitle>Agregar Venta</DialogTitle>
             <DialogContent>
                 <form onSubmit={formik.handleSubmit} className="addSaleModal__form">
                     <div className="addSaleModal__form__row">
@@ -71,7 +71,7 @@ export function AddTransactionModal(props: {
                                 value={formik.values.employee_id}
                                 label="Empleado"
                                 onChange={(event) => {
-                                    const employee = employees.find((employee) => employee._id === event.target.value);
+                                    const employee = props.employees.find((employee) => employee._id === event.target.value);
                                     if (employee) {
                                         formik.setValues({
                                             ...formik.values,
@@ -86,7 +86,7 @@ export function AddTransactionModal(props: {
                                 data-testid="employee-select"
                             >
                                 {
-                                    employees.map((employee) => {
+                                    props.employees.map((employee) => {
                                         return (
                                             <MenuItem disableRipple key={employee._id} value={employee._id} data-testid={`${employee.name} ${employee.lastname}`}>
                                                 {`${employee.name} ${employee.lastname}`}

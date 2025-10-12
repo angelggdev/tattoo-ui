@@ -11,16 +11,6 @@ jest.mock('../../../hooks/useTransactions.ts', () => ({
     }),
 }));
 jest.mock('../../../hooks/useEmployees.ts', () => ({
-    useEmployees: () => ({
-        employees: [
-            {
-                _id: '123abc',
-                name: 'Test',
-                lastname: 'Employee',
-                services: [ 'Tattoo', 'Piercing' ],
-            },
-        ],
-    }),
     useGetEmployeeServices: () => ({
         getEmployeeServices: (id) => Promise.resolve([
             'Tattoo',
@@ -33,7 +23,15 @@ const props = {
     open: true,
     handleClose: () => {},
     setOpen: (open) => {},
-    getTransactions: () => {}
+    getTransactions: () => {},
+    employees: [
+        {
+            _id: '123abc',
+            name: 'Test',
+            lastname: 'Employee',
+            services: [ 'Tattoo', 'Piercing' ],
+        },
+    ],
 };
 
 describe('AddTransactionModal', () => {
@@ -43,7 +41,7 @@ describe('AddTransactionModal', () => {
 
     test('Renders correctly', () => {
        render(<AddTransactionModal {...props} />);
-       expect(screen.getByText('Add Sale')).toBeInTheDocument();
+       expect(screen.getByText('Agregar Venta')).toBeInTheDocument();
        // expect(screen.getByTestId('datepicker')).toBeInTheDocument();
        expect(screen.getByTestId('employee-select')).toBeInTheDocument();
        expect(screen.getByTestId('service-select')).toBeInTheDocument();

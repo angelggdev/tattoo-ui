@@ -5,6 +5,7 @@
 
     &__form {
         display: flex;
+        flex-direction: column;
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
@@ -12,11 +13,5 @@
         &__select {
             width: 200px;
         }
-    }
-}
-
-@media (max-width: 650px) {
-    .filters__form {
-        flex-direction: column;
     }
 }

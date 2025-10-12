@@ -1,6 +1,6 @@
-import { Button, Collapse, FormControl, IconButton, InputLabel, ListItemText, MenuItem, OutlinedInput, Select } from "@mui/material";
+import { Button, Collapse, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useFormik } from "formik"
-import { useEmployees } from "../../../hooks/useEmployees.ts";
+import { Employee } from "../../../hooks/useEmployees.ts";
 import { SearchTransactions, service } from "../../../hooks/useTransactions.ts";
 import './TransactionFilters.scss';
 import { useState } from "react";
@@ -8,13 +8,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DateField from "../../../components/DateField/DateField.tsx";
 
-export default function TransactionFilters(props: { onSubmit: (values: SearchTransactions) => void }) {
+export default function TransactionFilters(props: { onSubmit: (values: SearchTransactions) => void, employees: Employee[] }) {
     const [open, setOpen] = useState<boolean>(false);
-    const { employees } = useEmployees();
-    const services: service[] = [
-        'Tattoo',
-        'Piercing',
-    ];
     const formik = useFormik<SearchTransactions>({
         initialValues: {
             start_date: null,
@@ -26,6 +21,7 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
             props.onSubmit(values);
         },
     });
+    const services: service[] = ['Tattoo', 'Piercing'];
 
     return (
         <div className="filters" data-testid="filters">
@@ -78,7 +74,7 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                             className="filters__form__select"
                         >
                             {
-                                employees.map((employee) => {
+                                props.employees.map((employee) => {
                                     return (
                                         <MenuItem key={employee._id} value={employee._id}>
                                             {`${employee.name} ${employee.lastname}`}
@@ -88,17 +84,20 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                             }
                         </Select>
                     </FormControl>
-                    {/* <FormControl className="marginTop">
-                        <InputLabel id="service-label">Service</InputLabel>
+                    <FormControl className="marginTop">
+                        <InputLabel id="service-label">Servicio</InputLabel>
                         <Select
                             labelId="service-label"
                             id="service"
                             value={formik.values.service}
-                            label="Service"
-                            onChange={(event) => formik.setValues({
-                                ...formik.values,
-                                service: event.target.value,
-                            })}
+                            label="Servicio"
+                            onChange={(event) => {
+                                formik.setValues({
+                                    ...formik.values,
+                                    service: event.target.value,
+                                });
+                                formik.handleSubmit();
+                            }}
                             className="filters__form__select"
                         >
                             {
@@ -111,7 +110,7 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                                 })
                             }
                         </Select>
-                    </FormControl> */}
+                    </FormControl>
                     <Button
                         className="marginTop"
                         variant="text"

@@ -11,11 +11,11 @@ import { Button, SvgIconTypeMap, TablePagination } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AddTransactionModal } from "./AddTransactionModal/AddTransactionModal.tsx";
 import { Add, Delete } from "@mui/icons-material";
-import { DeleteTransactionModal } from "./DeleteTransactionModal/DeleteTransactionModal.tsx";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import Row from "./Row/Row.tsx";
-import { BarChart } from '@mui/x-charts/BarChart';
 import TransactionFilters from "./TransactionFilters/TransactionFilters.tsx";
+import { Employee, useEmployees } from "../../hooks/useEmployees.ts";
+import { DeleteModal } from "../../components/DeleteModal/DeleteModal.tsx";
 
 export type action = {
     id: string;
@@ -27,12 +27,14 @@ export default function Transactions() {
     const [showAddSaleModal, setShowAddSaleModal] = useState<boolean>(false);
     const [showDeleteTransactionModal, setShowDeleteTransactionModal] = useState<boolean>(false);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [employees, setEmployees] = useState<Employee[]>([]);
     const [transactionsToDelete, setTransactionsToDelete] = useState<string[]>([]);
     const [page, setPage] = useState<number>(0);
     
     const { getTransactions: fetchTransactions, loading: loadingTransactions } = useTransactions();
     const { searchTransactions: fetchSearchTransactions, loading: loadingSearch } = useSearchTransactions();
     const { deleteTransaction: fetchDeleteTransaction, loading: deletingTransactions } = useDeleteTransaction();
+    const { getEmployees } = useEmployees();
 
     const actions: action[] = useMemo(() => {
         return [
@@ -77,6 +79,10 @@ export default function Transactions() {
         getTransactions();
     }, [getTransactions]);
 
+    useEffect(() => {
+        getEmployees().then(res => setEmployees(res));
+    }, [getEmployees]);
+
     const EmptyTable = () => {
         return ((loadingTransactions || deletingTransactions || loadingSearch) ? 
             <TableRow>
@@ -89,22 +95,6 @@ export default function Transactions() {
         );
     }
 
-    // Chart data
-    const chartData = useMemo(() => {
-        const amountByDates = transactions.reduce((acc: { [key: string]: number}, currentValue) => {
-            const date = new Date(currentValue.date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
-            acc[date] = (acc[date] || 0) + currentValue.amount;
-            return acc;
-        }, {})
-        const data = Object.keys(amountByDates).map((key) => {
-            return {
-                amount: amountByDates[key],
-                date: key,
-            }
-        }).splice(0, 10);
-        return data;
-    }, [transactions]);
-
     // Pagination 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -114,11 +104,11 @@ export default function Transactions() {
         <div className="transactions">
             <div className="transactions__table-container">
                 <div className="transactions__actions">
-                    <TransactionFilters onSubmit={searchTransactions}/>
+                    <TransactionFilters onSubmit={searchTransactions} employees={employees}/>
                     <Button variant="outlined" onClick={() => setShowAddSaleModal(true)} data-testid="add-sale-button"><Add/></Button>
                 </div>
                 <TableContainer component={Paper}>
-                    <Table sx={{ maxWidth: '60vw' }} aria-label="simple table">
+                    <Table sx={{ maxWidth: '60vw' }}>
                         {
                             window.innerWidth > 650 ?
                             <>
@@ -188,25 +178,12 @@ export default function Transactions() {
                     rowsPerPageOptions={[]}
                 />
             </div>
-            {
-               /*  window.innerWidth > 650 &&
-                <div style={{ width: '30vw' }}>
-                    <BarChart
-                        yAxis={[{ label: 'Amount', width: 100 }]}
-                        xAxis={[{ dataKey: 'date', tickPlacement: 'middle' }]}
-                        series={[{ dataKey: 'amount' }]}
-                        dataset={chartData}
-                        height={300}
-                    />
-                </div> */
-            }
-            <AddTransactionModal open={showAddSaleModal} handleClose={() => setShowAddSaleModal(false)} setOpen={setShowAddSaleModal} getTransactions={getTransactions}/>
-            <DeleteTransactionModal
+            <AddTransactionModal open={showAddSaleModal} handleClose={() => setShowAddSaleModal(false)} setOpen={setShowAddSaleModal} getTransactions={getTransactions} employees={employees}/>
+            <DeleteModal
                 open={showDeleteTransactionModal}
                 handleClose={() => setShowDeleteTransactionModal(false)}
                 setOpen={setShowDeleteTransactionModal}
-                deleteTransaction={deleteTransaction}
-                transactionIds={transactionsToDelete}
+                deleteFn={() => deleteTransaction(transactionsToDelete)}
             />
         </div>
     )

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { service } from "./useTransactions.ts";
 
 export interface Employee {
@@ -8,23 +8,32 @@ export interface Employee {
     services: Array<service>;
 }
 
-export const useEmployees = () => {
-    const [employees, setEmployees] = useState<Employee[]>([]);
-    const token = localStorage.getItem('token');
+export interface AddEmployee {
+    name: string;
+    lastname: string;
+    services: Array<service>;
+}
 
-    useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/api/employees`, {
+export const useEmployees = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const token = localStorage.getItem('token');
+    const getEmployees = useCallback(() => {
+        setLoading(true);
+        return fetch(`${process.env.REACT_APP_API_URL}/api/employees`, {
             headers: {
                 "Authorization": token || '',
             },
             method: "GET",
         })
             .then(res => res.json())
-            .then(res => setEmployees(res)); 
+            .then(res => {
+                setLoading(false);
+                return res;
+            }); 
     }, [token]);
     
-    return { employees };
-}
+    return { getEmployees, loading };
+};
 
 export const useGetEmployeeServices = () => {
     const token = localStorage.getItem('token');
@@ -41,4 +50,44 @@ export const useGetEmployeeServices = () => {
     }, [token]);
 
     return { getEmployeeServices };
-}
+};
+
+export const useDeleteEmployee = () => {
+    const token = localStorage.getItem('token');
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const deleteEmployee = (_id: string) => {
+        setLoading(true);
+        fetch(`${process.env.REACT_APP_API_URL}/api/employees/${_id}`, {
+            headers: {
+                "Authorization": token || '',
+                "Content-Type": "application/json",
+            },
+            method: "DELETE",
+        })
+            .then(res => res.json())
+            .then(res => res);
+        setLoading(false);
+    };
+
+    return { deleteEmployee, loading };
+};
+
+export const useAddEmployee = () => {
+    const token = localStorage.getItem('token');
+
+    const addEmployee = (value: AddEmployee) => {
+        return fetch(`${process.env.REACT_APP_API_URL}/api/employees`, {
+            headers: {
+                "Authorization": token || '',
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify(value),
+        })
+            .then(res => res.json())
+            .then(res => res);
+    }
+
+    return { addEmployee };
+};

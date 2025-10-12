@@ -63,7 +63,10 @@ export function useSearchTransactions() {
     const token = localStorage.getItem('token');
 
     const searchTransactions = useCallback((payload: SearchTransactions) => {
-        const params = new URLSearchParams(JSON.stringify(payload));
+        const params = Object.entries(payload)
+            .filter(([_, value]) => value !== undefined && value !== null)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
         setLoading(true);
         return fetch(`${process.env.REACT_APP_API_URL}/api/transactions/search?${params}`, {
             headers: {
