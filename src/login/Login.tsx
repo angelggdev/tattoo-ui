@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+// eslint-disable-next-line
 import { authBody, useLogin, useRegister } from "../hooks/useAuth.ts";
 import './Login.scss';
 import { useState } from "react";

@@ -6,16 +6,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { SearchTransactions, Transaction, useDeleteTransaction, useSearchTransactions, useTransactions } from "../../hooks/useTransactions.ts";
+import { SearchTransactions, Transaction, useDeleteTransaction, useExportTransactions, useSearchTransactions, useTransactions } from "../../hooks/useTransactions.ts";
 import { Button, SvgIconTypeMap, TablePagination } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AddTransactionModal } from "./AddTransactionModal/AddTransactionModal.tsx";
-import { Add, Delete } from "@mui/icons-material";
+import { Add, Delete, Download } from "@mui/icons-material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import Row from "./Row/Row.tsx";
 import TransactionFilters from "./TransactionFilters/TransactionFilters.tsx";
 import { Employee, useEmployees } from "../../hooks/useEmployees.ts";
 import { DeleteModal } from "../../components/DeleteModal/DeleteModal.tsx";
+import { useFormik } from "formik";
 
 export type action = {
     id: string;
@@ -34,6 +35,7 @@ export default function Transactions() {
     const { getTransactions: fetchTransactions, loading: loadingTransactions } = useTransactions();
     const { searchTransactions: fetchSearchTransactions, loading: loadingSearch } = useSearchTransactions();
     const { deleteTransaction: fetchDeleteTransaction, loading: deletingTransactions } = useDeleteTransaction();
+    const { exportTransactions } = useExportTransactions();
     const { getEmployees } = useEmployees();
 
     const actions: action[] = useMemo(() => {
@@ -56,7 +58,7 @@ export default function Transactions() {
         { name: 'Cliente', width: 100, testId: 'transactions-table-client' },
         { name: 'Acciones', width: 50, testId: 'transactions-table-actions' },
     ];
-
+    
     const openDeleteTransactionModal = (ids: string[]) => {
         setTransactionsToDelete(ids)
         setShowDeleteTransactionModal(true);
@@ -74,6 +76,18 @@ export default function Transactions() {
         getTransactions();
         setShowDeleteTransactionModal(false);
     };
+
+    const formik = useFormik<SearchTransactions>({
+        initialValues: {
+            start_date: null,
+            end_date: null,
+            employee_id: '',
+            service: '',
+        },
+        onSubmit: (values: SearchTransactions) => {
+            searchTransactions(values);
+        },
+    });
 
     useEffect(() => {
         getTransactions();
@@ -104,8 +118,11 @@ export default function Transactions() {
         <div className="transactions">
             <div className="transactions__table-container">
                 <div className="transactions__actions">
-                    <TransactionFilters onSubmit={searchTransactions} employees={employees}/>
-                    <Button variant="outlined" onClick={() => setShowAddSaleModal(true)} data-testid="add-sale-button"><Add/></Button>
+                    <TransactionFilters employees={employees} formik={formik}/>
+                    <div>
+                        <Button variant="outlined" onClick={() => setShowAddSaleModal(true)} data-testid="add-sale-button"><Add/></Button>
+                        <Button variant="outlined" onClick={() => exportTransactions(formik.values)} data-testid="add-sale-button"><Download/></Button>
+                    </div>
                 </div>
                 <TableContainer component={Paper}>
                     <Table sx={{ maxWidth: '60vw' }}>

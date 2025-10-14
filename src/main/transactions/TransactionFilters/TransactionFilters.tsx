@@ -1,26 +1,14 @@
 import { Button, Collapse, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useFormik } from "formik"
 import { Employee } from "../../../hooks/useEmployees.ts";
-import { SearchTransactions, service } from "../../../hooks/useTransactions.ts";
+import { service } from "../../../hooks/useTransactions.ts";
 import './TransactionFilters.scss';
 import { useState } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DateField from "../../../components/DateField/DateField.tsx";
 
-export default function TransactionFilters(props: { onSubmit: (values: SearchTransactions) => void, employees: Employee[] }) {
+export default function TransactionFilters(props: { employees: Employee[], formik: any }) {
     const [open, setOpen] = useState<boolean>(false);
-    const formik = useFormik<SearchTransactions>({
-        initialValues: {
-            start_date: null,
-            end_date: null,
-            employee_id: '',
-            service: '',
-        },
-        onSubmit: (values: SearchTransactions) => {
-            props.onSubmit(values);
-        },
-    });
     const services: service[] = ['Tattoo', 'Piercing'];
 
     return (
@@ -30,31 +18,31 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                 <p>Filtros</p>
             </Button>
             <Collapse in={open}>
-                <form onSubmit={formik.handleSubmit} className="filters__form">
+                <form onSubmit={props.formik.handleSubmit} className="filters__form">
                     <FormControl>
                         <DateField
                             label="Fecha inicial"
                             onChange={(value) => {
-                                formik.setValues({
-                                    ...formik.values,
+                                props.formik.setValues({
+                                    ...props.formik.values,
                                     start_date: value,
                                 });
-                                formik.handleSubmit();
+                                props.formik.handleSubmit();
                             }}
-                            value={formik.values.start_date}
+                            value={props.formik.values.start_date}
                         />
                     </FormControl>
                     <FormControl>
                         <DateField
                             label="Fecha final"
                             onChange={(value) => {
-                                    formik.setValues({
-                                    ...formik.values,
+                                    props.formik.setValues({
+                                    ...props.formik.values,
                                     end_date: value,
                                 });
-                                formik.handleSubmit();
+                                props.formik.handleSubmit();
                             }}
-                            value={formik.values.end_date}
+                            value={props.formik.values.end_date}
                         />
                     </FormControl>
                     <FormControl>
@@ -62,14 +50,14 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                         <Select
                             labelId="employee-label"
                             id="employee_id"
-                            value={formik.values.employee_id}
+                            value={props.formik.values.employee_id}
                             label="Employee"
                             onChange={(event) => {
-                                formik.setValues({
-                                    ...formik.values,
+                                props.formik.setValues({
+                                    ...props.formik.values,
                                     employee_id: event.target.value,
                                 });
-                                formik.handleSubmit();
+                                props.formik.handleSubmit();
                             }}
                             className="filters__form__select"
                         >
@@ -89,14 +77,14 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                         <Select
                             labelId="service-label"
                             id="service"
-                            value={formik.values.service}
+                            value={props.formik.values.service}
                             label="Servicio"
                             onChange={(event) => {
-                                formik.setValues({
-                                    ...formik.values,
+                                props.formik.setValues({
+                                    ...props.formik.values,
                                     service: event.target.value,
                                 });
-                                formik.handleSubmit();
+                                props.formik.handleSubmit();
                             }}
                             className="filters__form__select"
                         >
@@ -115,8 +103,8 @@ export default function TransactionFilters(props: { onSubmit: (values: SearchTra
                         className="marginTop"
                         variant="text"
                         onClick={() => {
-                            formik.resetForm();
-                            formik.handleSubmit();
+                            props.formik.resetForm();
+                            props.formik.handleSubmit();
                         }}
                     >
                         Borrar

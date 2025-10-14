@@ -4,7 +4,7 @@ export function Loader() {
 
     return (
         <div className="loader">
-            <img src="/login-pic.jpg" className="loading-animation"/>
+            <img src="/login-pic.jpg" className="loading-animation" alt="Cargando"/>
         </div>
     )
 }

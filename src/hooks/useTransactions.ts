@@ -125,3 +125,43 @@ export function useDeleteTransaction() {
 
     return { deleteTransaction, loading };
 }
+
+export function useExportTransactions() {
+    const [loading, setLoading] = useState<boolean>(false);
+    const token = localStorage.getItem('token');
+
+    const exportTransactions = useCallback((payload?: SearchTransactions) => {
+        let url;
+        if (payload) {
+            const params = Object.entries(payload)
+                .filter(([_, value]) => value !== undefined && value !== null)
+                .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+                .join('&');
+            url = `${process.env.REACT_APP_API_URL}/api/transactions/export/csv?${params}`;
+        } else {
+            url = `${process.env.REACT_APP_API_URL}/api/transactions/export/csv`
+        }
+        setLoading(true);
+        return fetch(url, {
+            headers: {
+                "Authorization": token || '',
+                "Content-Type": "application/json",
+            },
+            method: "GET",
+        })
+            .then(res => res.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'data.csv'; // name of the downloaded file
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+                setLoading(false);
+            });
+    }, [token]);
+
+    return { loading, exportTransactions };
+}
