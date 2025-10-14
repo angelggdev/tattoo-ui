@@ -121,7 +121,7 @@ export default function Transactions() {
                     <TransactionFilters employees={employees} formik={formik}/>
                     <div>
                         <Button variant="outlined" onClick={() => setShowAddSaleModal(true)} data-testid="add-sale-button"><Add/></Button>
-                        <Button variant="outlined" onClick={() => exportTransactions(formik.values)} data-testid="add-sale-button"><Download/></Button>
+                        <Button variant="outlined" onClick={() => exportTransactions(formik.values)} data-testid="export-transactions-button"><Download/></Button>
                     </div>
                 </div>
                 <TableContainer component={Paper}>
