@@ -71,9 +71,9 @@ export default function Transactions() {
         await fetchSearchTransactions(values)
             .then((res) => setTransactions(res));
     }, [fetchSearchTransactions]);
-    const deleteTransaction = (ids: string[]) => {
-        fetchDeleteTransaction(ids);
-        getTransactions();
+    const deleteTransaction = async (ids: string[]) => {
+        await fetchDeleteTransaction(ids)
+            .then(() => getTransactions());
         setShowDeleteTransactionModal(false);
     };
 
@@ -156,7 +156,7 @@ export default function Transactions() {
                                                 {
                                                     actions.map((action) => {
                                                         return (
-                                                            <Button key={action.id} onClick={() => action.action([row._id])}>
+                                                            <Button key={action.id} onClick={() => action.action([row._id])} data-testid={`remove-transaction-${row._id}`}>
                                                                 <action.icon />
                                                             </Button>
                                                         )

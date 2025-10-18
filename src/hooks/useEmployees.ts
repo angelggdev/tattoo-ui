@@ -58,7 +58,7 @@ export const useDeleteEmployee = () => {
 
     const deleteEmployee = (_id: string) => {
         setLoading(true);
-        fetch(`${process.env.REACT_APP_API_URL}/api/employees/${_id}`, {
+        return fetch(`${process.env.REACT_APP_API_URL}/api/employees/${_id}`, {
             headers: {
                 "Authorization": token || '',
                 "Content-Type": "application/json",
@@ -66,8 +66,10 @@ export const useDeleteEmployee = () => {
             method: "DELETE",
         })
             .then(res => res.json())
-            .then(res => res);
-        setLoading(false);
+            .then(res => {
+                setLoading(false);
+                return res;
+            });
     };
 
     return { deleteEmployee, loading };
@@ -75,8 +77,10 @@ export const useDeleteEmployee = () => {
 
 export const useAddEmployee = () => {
     const token = localStorage.getItem('token');
+    const [loading, setLoading] = useState(false);
 
     const addEmployee = (value: AddEmployee) => {
+        setLoading(true);
         return fetch(`${process.env.REACT_APP_API_URL}/api/employees`, {
             headers: {
                 "Authorization": token || '',
@@ -86,8 +90,11 @@ export const useAddEmployee = () => {
             body: JSON.stringify(value),
         })
             .then(res => res.json())
-            .then(res => res);
+            .then(res => {
+                setLoading(false);
+                return res;
+            });
     }
 
-    return { addEmployee };
+    return { addEmployee, loading };
 };

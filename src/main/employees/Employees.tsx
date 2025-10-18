@@ -57,9 +57,9 @@ export default function Employees() {
         await fetchEmployees()
             .then((res) => setEmployee(res));
     }, [fetchEmployees]);
-    const deleteEmployee = (id: string) => {
-        fetchDeleteEmployee(id);
-        getEmployees();
+    const deleteEmployee = async (id: string) => {
+        await fetchDeleteEmployee(id)
+            .then(() => getEmployees());
         setShowDeleteEmployeeModal(false);
     };
 

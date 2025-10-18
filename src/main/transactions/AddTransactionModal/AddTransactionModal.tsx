@@ -13,7 +13,7 @@ export function AddTransactionModal(props: {
     getTransactions: () => void,
     employees: Employee[],
 }) {
-    const { addTransaction } = useAddTransaction();
+    const { addTransaction, loading } = useAddTransaction();
     const { getEmployeeServices } = useGetEmployeeServices();
     const [services, setServices] = useState<service[]>([]);
     const formik = useFormik<AddTransaction>({
@@ -28,12 +28,13 @@ export function AddTransactionModal(props: {
             client_name: '',
             employee: {} as Employee,
         },
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             const transaction = {
                 ...values,
                 amount: Number(values.amount),
             };
-            addTransaction(transaction).then(() => props.getTransactions());
+            await addTransaction(transaction)
+                .then(() => props.getTransactions());
             formik.resetForm();
             props.setOpen(false);
         },
@@ -169,11 +170,12 @@ export function AddTransactionModal(props: {
                         </FormControl>
                     </div>
                     <div className="addSaleModal__form__buttons">
-                        <Button disableRipple type="submit" variant="contained" data-testid="add-sale-modal-button">
+                        <Button disabled={loading} disableRipple type="submit" variant="contained" data-testid="add-sale-modal-button">
                             Agregar
                         </Button>
                         <Button
                             disableRipple
+                            disabled={loading}
                             variant="outlined" 
                             onClick={() => {
                                 props.handleClose();

@@ -87,8 +87,10 @@ export function useSearchTransactions() {
 
 export function useAddTransaction() {
     const token = localStorage.getItem('token');
+    const [loading, setLoading] = useState(false);
 
     const addTransaction = (value: AddTransaction) => {
+        setLoading(true);
         return fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
             headers: {
                 "Authorization": token || '',
@@ -98,10 +100,13 @@ export function useAddTransaction() {
             body: JSON.stringify(value),
         })
             .then(res => res.json())
-            .then(res => res);
+            .then(res => {
+                setLoading(false);
+                return res;
+            });
     }
 
-    return { addTransaction };
+    return { addTransaction, loading };
 }
 
 export function useDeleteTransaction() {
@@ -110,7 +115,7 @@ export function useDeleteTransaction() {
 
     const deleteTransaction = (ids: string[]) => {
         setLoading(true);
-        fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
+        return fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
             headers: {
                 "Authorization": token || '',
                 "Content-Type": "application/json",
@@ -119,8 +124,10 @@ export function useDeleteTransaction() {
             body: JSON.stringify({ ids }),
         })
             .then(res => res.json())
-            .then(res => res);
-        setLoading(false);
+            .then(res => {
+                setLoading(false);
+                return res;
+            });
     };
 
     return { deleteTransaction, loading };

@@ -10,7 +10,7 @@ export function AddEmployeeModal(props: {
     setOpen: (open: boolean) => void,
     getEmployees: () => void,
 }) {
-    const { addEmployee } = useAddEmployee();
+    const { addEmployee, loading } = useAddEmployee();
     const services: service[] = ['Tattoo', 'Piercing'];
     const formik = useFormik<AddEmployee>({
         initialValues: {
@@ -18,8 +18,9 @@ export function AddEmployeeModal(props: {
             lastname: '',
             services: [],
         },
-        onSubmit: (values) => {
-            addEmployee(values).then(() => props.getEmployees());
+        onSubmit: async (values) => {
+            await addEmployee(values)
+                .then(() => props.getEmployees());
             formik.resetForm();
             props.setOpen(false);
         },
@@ -89,11 +90,12 @@ export function AddEmployeeModal(props: {
                         </FormControl>
                     </div>
                     <div className="addEmployeeModal__form__buttons">
-                        <Button disableRipple type="submit" variant="contained" data-testid="add-employee-modal-button">
+                        <Button disabled={loading} disableRipple type="submit" variant="contained" data-testid="add-employee-modal-button">
                             Agregar
                         </Button>
                         <Button
                             disableRipple
+                            disabled={loading}
                             variant="outlined" 
                             onClick={() => {
                                 props.handleClose();
