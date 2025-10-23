@@ -119,7 +119,7 @@ export default function Employees() {
                                                 {
                                                     actions.map((action) => {
                                                         return (
-                                                            <Button key={action.id} onClick={() => action.action(row._id)} data-testid={`action-delete-${row.name}`}>
+                                                            <Button key={action.id} onClick={() => action.action(row._id)} data-testid={`action-delete-${row._id}`}>
                                                                 <action.icon />
                                                             </Button>
                                                         )
