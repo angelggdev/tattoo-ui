@@ -33,8 +33,27 @@ export function AddTransactionModal(props: {
                 ...values,
                 amount: Number(values.amount),
             };
+            const automationData = {
+                ...transaction,
+                date: values.date?.toDate().toLocaleDateString('es-ES'),
+                services: values.service.join(', '),
+                employee: `${values.employee_name} ${values.employee_lastname}`,
+                id: null,
+            };
             await addTransaction(transaction)
-                .then(() => props.getTransactions());
+                .then((res) => {
+                    automationData.id = res._id;
+                    props.getTransactions();
+                });
+            await fetch(`${process.env.REACT_APP_AUTOMATION_API_URL}/webhook/add-new-sale`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': process.env.REACT_APP_AUTOMATION_AUTHORIZATION || ''
+                },
+                body: JSON.stringify(automationData),
+            })
+                .catch((e) => console.error(e));
             formik.resetForm();
             props.setOpen(false);
         },
